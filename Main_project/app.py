@@ -1,32 +1,14 @@
-import datetime
 import json
 import uuid
 
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///messages.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
+from Main_project.base import app, db
+from Main_project.db_model import Message
 
 
 class MyError(BaseException):
     pass
-
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    message_uuid = db.Column(db.String(50), unique=True)
-    text_message = db.Column(db.String(140), nullable=False)
-    number = db.Column(db.String(11), nullable=False)
-    provider = db.Column(db.String(140), default="StubProvider")
-    is_sent = db.Column(db.Integer, default=0)
-    is_delivered = db.Column(db.Integer, default=0)
-    date = db.Column(db.DateTime, default=datetime.datetime.now())
-
-    def __repr__(self):
-        return "<Message %r>" % self.id
 
 
 @app.route("/")
@@ -69,7 +51,3 @@ def message_status(message_uuid):
 def messages_info():
     messages = Message.query.order_by(Message.date.desc()).all()
     return render_template("messages-info.html", messages=messages)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
