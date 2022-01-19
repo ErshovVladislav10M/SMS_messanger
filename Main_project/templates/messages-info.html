@@ -7,9 +7,16 @@ Messages info
 {% block body %}
 <div class="container mt-5">
     <h1>Messages info</h1>
-    <form method="post">
-        <textarea name="message_uuid" id="message_uuid" class="form-control" placeholder="Enter message uuid"></textarea><br>
-        <input type="submit" class="btn btn-success" value="Get status">
-    </form>
+
+    {% for message in messages %}
+    <div class="alert alert-info">
+        <p>message uuid: {{message.message_uuid}}</p>
+        <p>number: {{message.number}}</p>
+        <p>text_message: {{message.text_message}}</p>
+        <p>is_sent: {{message.is_sent}}</p>
+        <p>is_delivered: {{message.is_delivered}}</p>
+        <p>date: {{message.date.date()}}</p>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

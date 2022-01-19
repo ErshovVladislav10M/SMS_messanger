@@ -1,7 +1,8 @@
 import datetime
+import json
 import uuid
 
-from flask import Flask, redirect, render_template, request
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -33,44 +34,41 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/message-status/<str:message_uuid>")
-def message_status(message_uuid: str):
-    message = Message.query.get(message_uuid)
-    return render_template("message-status.html", message=message)
+@app.route("/create-message/POST/<text_message>/<number>")
+def create_message2(text_message, number):
+    message_uuid = uuid.uuid4()
+
+    message = Message(
+        message_uuid=str(message_uuid),
+        text_message=text_message,
+        number=number,
+    )
+
+    try:
+        db.session.add(message)
+        db.session.commit()
+        return json.dumps(str(message_uuid))
+    except MyError:
+        return json.dumps("Error adding message")
+
+
+@app.route("/message-status/GET/<message_uuid>")
+def message_status(message_uuid):
+    message = Message.query.filter_by(message_uuid=message_uuid).first()
+    data = (
+        message.message_uuid,
+        message.text_message,
+        message.number,
+        message.is_sent,
+        message.is_delivered,
+    )
+    return json.dumps(data)
 
 
 @app.route("/messages-info", methods=["POST", "GET"])
 def messages_info():
-    if request.method == "POST":
-        message_uuid = request.form["message_uuid"]
-        return redirect("/message-status/" + str(message_uuid))
-    else:
-        return render_template("messages-info.html")
-
-
-@app.route("/create-message", methods=["POST", "GET"])
-def create_message():
-    if request.method == "POST":
-        text_message = request.form["text_message"]
-        number = request.form["number"]
-        provider = request.form["provider"]
-        message_uuid = uuid.uuid4()
-
-        message = Message(
-            message_uuid=str(message_uuid),
-            text_message=text_message,
-            number=number,
-            provider=provider,
-        )
-
-        try:
-            db.session.add(message)
-            db.session.commit()
-            return redirect("/message-status/" + str(message_uuid))
-        except MyError:
-            return "Error adding message"
-    else:
-        return render_template("create-message.html")
+    messages = Message.query.order_by(Message.date.desc()).all()
+    return render_template("messages-info.html", messages=messages)
 
 
 if __name__ == "__main__":
