@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+Messages info
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Messages info</h1>
+    <form method="post">
+        <textarea name="message_uuid" id="message_uuid" class="form-control" placeholder="Enter message uuid"></textarea><br>
+        <input type="submit" class="btn btn-success" value="Get status">
+    </form>
+</div>
+{% endblock %}

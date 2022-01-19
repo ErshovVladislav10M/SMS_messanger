@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+Message status
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Message {{ message.message_uuid }}</h1>
+    <div class="alert alert-info">
+        <p>text message - {{ message.text_message }}</p>
+        <p>number - {{ message.number }}</p>
+        <p>provider - {{ message.provider }}</p>
+        <p>date - {{ message.date.date() }}</p>
+        <p>is_sender - {{ message.is_sender }}</p>
+        <p>is_delivered - {{ message.is_delivered }}</p>
+    </div>
+</div>
+{% endblock %}
