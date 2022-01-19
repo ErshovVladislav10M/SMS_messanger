@@ -34,10 +34,6 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/POST/<api>/<login>")
-def create_message2(text_message, number):
-
-
 @app.route("/create-message/POST/<text_message>/<number>")
 def create_message(text_message, number):
     message_uuid = uuid.uuid4()
