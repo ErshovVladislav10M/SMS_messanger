@@ -1,8 +1,8 @@
+import datetime
 import json
 import uuid
-import datetime
 
-from flask import render_template, abort
+from flask import abort, render_template
 
 from Main_project.base import app, db
 from Main_project.db_model import Message
