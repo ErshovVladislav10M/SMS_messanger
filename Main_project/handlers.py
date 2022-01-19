@@ -41,17 +41,17 @@ def create_message(username, text_message, number):
 def message_status(username, message_uuid):
     message = Message.query.filter_by(message_uuid=message_uuid).first()
     if message.created_by == username:
-        data = (
-            message.message_uuid,
-            message.created_by,
-            str(message.created_at),
-            message.text_message,
-            message.number,
-            message.provider,
-            str(message.sent_at),
-            str(message.delivered_at),
-            message.status,
-        )
+        data = {
+            "uuid": message.message_uuid,
+            "created_by": message.created_by,
+            "created_at": str(message.created_at),
+            "text_message": message.text_message,
+            "number": message.number,
+            "provider": message.provider,
+            "sent_at": str(message.sent_at),
+            "delivered_at": str(message.delivered_at),
+            "status": message.status,
+        }
         return json.dumps(data)
     else:
         return abort(401)
