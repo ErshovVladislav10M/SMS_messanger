@@ -2,7 +2,7 @@ import json
 import uuid
 import datetime
 
-from flask import render_template
+from flask import render_template, abort
 
 from Main_project.base import app, db
 from Main_project.db_model import Message
@@ -54,7 +54,7 @@ def message_status(username, message_uuid):
         )
         return json.dumps(data)
     else:
-        return 401
+        return abort(401)
 
 
 @app.route("/messages-info")
