@@ -7,6 +7,8 @@ from flask import abort, render_template
 from Main_project.base import app, db
 from Main_project.db_model import Message
 
+QUEUE_MESSAGES_UUID = []
+
 
 class MyError(BaseException):
     pass
@@ -32,6 +34,7 @@ def create_message(username, text_message, number):
     try:
         db.session.add(message)
         db.session.commit()
+        QUEUE_MESSAGES_UUID.append(str(message_uuid))
         return json.dumps(str(message_uuid))
     except MyError:
         return json.dumps("Error adding message")
