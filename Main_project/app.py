@@ -10,6 +10,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
+class MyError(BaseException):
+    pass
+
+
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message_uuid = db.Column(db.String(50), unique=True)
@@ -29,7 +33,7 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/message-status/<int:message_uuid>")
+@app.route("/message-status/<str:message_uuid>")
 def message_status(message_uuid: str):
     message = Message.query.get(message_uuid)
     return render_template("message-status.html", message=message)
@@ -62,9 +66,8 @@ def create_message():
         try:
             db.session.add(message)
             db.session.commit()
-            #return redirect("/messages-info")
             return redirect("/message-status/" + str(message_uuid))
-        except:
+        except MyError:
             return "Error adding message"
     else:
         return render_template("create-message.html")
