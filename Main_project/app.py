@@ -34,8 +34,12 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/create-message/POST/<text_message>/<number>")
+@app.route("/POST/<api>/<login>")
 def create_message2(text_message, number):
+
+
+@app.route("/create-message/POST/<text_message>/<number>")
+def create_message(text_message, number):
     message_uuid = uuid.uuid4()
 
     message = Message(
@@ -65,7 +69,7 @@ def message_status(message_uuid):
     return json.dumps(data)
 
 
-@app.route("/messages-info", methods=["POST", "GET"])
+@app.route("/messages-info")
 def messages_info():
     messages = Message.query.order_by(Message.date.desc()).all()
     return render_template("messages-info.html", messages=messages)
