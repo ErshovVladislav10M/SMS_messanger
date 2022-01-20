@@ -1,8 +1,8 @@
 import datetime
 
-from Main_project.Providers.BaseProvider import BaseProvider
-from Main_project.db_model import Message
 from Main_project.base import db
+from Main_project.db_model import Message
+from Main_project.Providers.BaseProvider import BaseProvider
 
 
 class StubProvider(BaseProvider):
