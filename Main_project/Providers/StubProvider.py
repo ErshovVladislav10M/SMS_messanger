@@ -6,10 +6,14 @@ from Main_project.base import db
 
 
 class StubProvider(BaseProvider):
-    def send_message(self):
+    name = "StubProvider"
+
+    @staticmethod
+    def send_message():
         pass
 
-    def update_message_status(self, message: Message):
+    @staticmethod
+    def update_message_status(message: Message):
         message.sent_at = datetime.datetime.now()
         message.status = "Sent"
         db.session.add(message)

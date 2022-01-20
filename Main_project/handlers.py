@@ -6,8 +6,22 @@ from flask import abort, render_template
 
 from Main_project.base import app, db
 from Main_project.db_model import Message
+from Main_project.Providers.StubProvider import StubProvider
 
 QUEUE_MESSAGES_UUID = []
+LIST_PROVIDERS = [StubProvider]
+
+
+def messenger_controller():
+    while len(QUEUE_MESSAGES_UUID) > 0:
+        message_uuid = QUEUE_MESSAGES_UUID.pop()
+        message = Message.query.filter_by(message_uuid=message_uuid).first()
+
+        for provider in LIST_PROVIDERS:
+            if provider.name == message.provider:
+                provider.send_message()
+                provider.update_message_status(message)
+                break
 
 
 class MyError(BaseException):
@@ -35,6 +49,7 @@ def create_message(username, text_message, number):
         db.session.add(message)
         db.session.commit()
         QUEUE_MESSAGES_UUID.append(str(message_uuid))
+        messenger_controller()
         return json.dumps(str(message_uuid))
     except MyError:
         return json.dumps("Error adding message")

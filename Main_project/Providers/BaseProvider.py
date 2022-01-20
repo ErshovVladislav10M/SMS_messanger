@@ -4,10 +4,12 @@ from Main_project.db_model import Message
 
 
 class BaseProvider(ABC):
+    @staticmethod
     @abstractmethod
-    def send_message(self):
+    def send_message():
         pass
 
+    @staticmethod
     @abstractmethod
-    def update_message_status(self, message: Message):
+    def update_message_status(message: Message):
         pass
