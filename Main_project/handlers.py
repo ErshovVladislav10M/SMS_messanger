@@ -53,7 +53,7 @@ def create_message(text_message: str, number: str, provider: str):
 
 
 @app.route("/message-status/<message_uuid>")
-def message_status(message_uuid):
+def message_status(message_uuid: str):
     code_str = request.headers.get("AUTHORIZATION").lstrip("Basic ")
     decode_str = b64decode(code_str)
     username = decode_str.decode("utf-8").split(":")[0]

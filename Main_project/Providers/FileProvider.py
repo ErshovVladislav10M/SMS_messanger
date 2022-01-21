@@ -11,10 +11,10 @@ class FileProvider:
     @staticmethod
     def send_message(message: Message):
         name_fi = (
-            #str(datetime.datetime.now().isoformat())
-            #+ "_"
-            #+ message.number
-            message.number + ".txt"
+            str(datetime.date.today())
+            + "_"
+            + message.number
+            + ".txt"
         )
         with open(
             Path.cwd() / "Providers" / "sent_sms" / name_fi,
