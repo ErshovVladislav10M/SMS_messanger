@@ -1,7 +1,7 @@
 from Main_project.base import celery
 from Main_project.db_model import Message
-from Main_project.Providers.StubProvider import StubProvider
 from Main_project.Providers.FileProvider import FileProvider
+from Main_project.Providers.StubProvider import StubProvider
 
 LIST_PROVIDERS = [StubProvider, FileProvider]
 QUEUE_MESSAGES_UUID = []
