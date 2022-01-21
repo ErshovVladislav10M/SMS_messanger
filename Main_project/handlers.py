@@ -23,6 +23,8 @@ def home():
 def authentication():
     if not request.headers.get("AUTHORIZATION"):
         abort(401)
+    elif request.headers.get("AUTHORIZATION").split()[0] != "Basic":
+        abort(401)
 
 
 @app.route("/create-message/<text_message>/<number>/<provider>")
