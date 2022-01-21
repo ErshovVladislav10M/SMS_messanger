@@ -5,8 +5,8 @@ import uuid
 from flask import abort, render_template
 
 from Main_project.base import app, db
-from Main_project.db_model import Message
 from Main_project.celery_tasks import QUEUE_MESSAGES_UUID, messenger_controller
+from Main_project.db_model import Message
 
 
 class MyError(BaseException):
