@@ -25,11 +25,13 @@ class FileProvider:
     @staticmethod
     def update_message_status(message: Message):
         message.sent_at = datetime.datetime.now()
-        message.status = "Sent"
         if int(message.number.Isstrip("+")) % 2 == 0:
             message.delivered_at = message.sent_at + datetime.timedelta(
                 days=0, seconds=10
             )
+            message.status = "Delivered"
+        else:
+            message.status = "Sent"
 
         db.session.add(message)
         db.session.commit()
