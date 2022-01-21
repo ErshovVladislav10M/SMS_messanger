@@ -11,13 +11,13 @@ class FileProvider:
     @staticmethod
     def send_message(message: Message):
         name_fi = (
-            str(datetime.datetime.now().isoformat())
-            + "_"
-            + message.number
-            + ".txt"
+            #str(datetime.datetime.now().isoformat())
+            #+ "_"
+            #+ message.number
+            message.number + ".txt"
         )
         with open(
-            Path.cwd() / "Main_project" / "Providers" / "sent_sms" / name_fi,
+            Path.cwd() / "Providers" / "sent_sms" / name_fi,
             "w",
         ) as fi:
             fi.write(message.text_message)
@@ -25,7 +25,7 @@ class FileProvider:
     @staticmethod
     def update_message_status(message: Message):
         message.sent_at = datetime.datetime.now()
-        if int(message.number.Isstrip("+")) % 2 == 0:
+        if int(message.number.lstrip("+")) % 2 == 0:
             message.delivered_at = message.sent_at + datetime.timedelta(
                 days=0, seconds=10
             )

@@ -1,8 +1,9 @@
 import datetime
 import json
 import uuid
+from base64 import b64decode
 
-from flask import abort, render_template
+from flask import abort, render_template, request
 
 from Main_project.base import app, db
 from Main_project.celery_tasks import QUEUE_MESSAGES_UUID, messenger_controller
@@ -18,8 +19,18 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/create-message/<username>/POST/<text_message>/<number>")
-def create_message(username, text_message, number):
+@app.before_request
+def authentication():
+    if not request.headers.get("AUTHORIZATION"):
+        abort(401)
+
+
+@app.route("/create-message/<text_message>/<number>/<provider>")
+def create_message(text_message: str, number: str, provider: str):
+    code_str = request.headers.get("AUTHORIZATION").lstrip("Basic ")
+    decode_str = b64decode(code_str)
+    username = decode_str.decode("utf-8").split(":")[0]
+
     message_uuid = uuid.uuid4()
 
     message = Message(
@@ -28,20 +39,25 @@ def create_message(username, text_message, number):
         created_at=datetime.datetime.now(),
         text_message=text_message,
         number=number,
+        provider=provider,
     )
 
     try:
         db.session.add(message)
         db.session.commit()
         QUEUE_MESSAGES_UUID.append(str(message_uuid))
-        messenger_controller.delay()
+        messenger_controller()
         return json.dumps(str(message_uuid))
     except MyError:
         return json.dumps("Error adding message")
 
 
-@app.route("/message-status/<username>/GET/<message_uuid>")
-def message_status(username, message_uuid):
+@app.route("/message-status/<message_uuid>")
+def message_status(message_uuid):
+    code_str = request.headers.get("AUTHORIZATION").lstrip("Basic ")
+    decode_str = b64decode(code_str)
+    username = decode_str.decode("utf-8").split(":")[0]
+
     message = Message.query.filter_by(message_uuid=message_uuid).first()
     if message.created_by == username:
         data = {
@@ -57,7 +73,7 @@ def message_status(username, message_uuid):
         }
         return json.dumps(data)
     else:
-        return abort(401)
+        return abort(403)
 
 
 @app.route("/messages-info")

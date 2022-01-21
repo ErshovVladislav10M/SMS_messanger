@@ -8,7 +8,7 @@ class StubProvider:
     name = "StubProvider"
 
     @staticmethod
-    def send_message():
+    def send_message(message: Message):
         pass
 
     @staticmethod
