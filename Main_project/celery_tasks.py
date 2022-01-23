@@ -1,3 +1,5 @@
+import time
+
 from Main_project.base import celery
 from Main_project.db_model import Message
 from Main_project.Providers.FileProvider import FileProvider
@@ -9,12 +11,19 @@ QUEUE_MESSAGES_UUID = []
 
 @celery.task
 def messenger_controller():
+    """
+    Sending messages from the unsent queue by the respective providers.
+    """
     while len(QUEUE_MESSAGES_UUID) > 0:
         message_uuid = QUEUE_MESSAGES_UUID.pop()
         message = Message.query.filter_by(message_uuid=message_uuid).first()
 
         for provider in LIST_PROVIDERS:
             if provider.name == message.provider:
-                provider.send_message(message)
+                attempt = 1
+                while provider.numbers_of_attempt_send <= attempt:
+                    provider.send_message(message)
+                    attempt += 1
+                    time.sleep(0.5)
                 provider.update_message_status(message)
                 break
