@@ -71,7 +71,7 @@ def message_status(message_uuid: str):
     By uuid of the message, it gives information
     about it from the database in json format.
     If the username from the HTTP header does not
-    match the creator of the post, then 403.
+    match the creator of the post, then code 403.
     """
     username = get_username_from_http()
 
