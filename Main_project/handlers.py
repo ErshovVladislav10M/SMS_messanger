@@ -14,24 +14,35 @@ class MyError(BaseException):
     pass
 
 
-@app.route("/")
-def home():
-    return render_template("home.html")
-
-
 @app.before_request
 def authentication():
+    """
+    Checking for the presence of an HTTP header
+    and the correctness of its format.
+    """
     if not request.headers.get("AUTHORIZATION"):
         abort(401)
     elif request.headers.get("AUTHORIZATION").split()[0] != "Basic":
         abort(401)
 
 
-@app.route("/create-message/<text_message>/<number>/<provider>")
-def create_message(text_message: str, number: str, provider: str):
+def get_username_from_http():
+    """
+    Getting username from HTTP header.
+    """
     code_str = request.headers.get("AUTHORIZATION").lstrip("Basic ")
     decode_str = b64decode(code_str)
-    username = decode_str.decode("utf-8").split(":")[0]
+    return decode_str.decode("utf-8").split(":")[0]
+
+
+@app.route("/create-message/<text_message>/<number>/<provider>")
+def create_message(text_message: str, number: str, provider: str):
+    """
+    Creating an instance of the Message class
+    and inserting it into the database.
+    Returns the uuid of the generated message, if successful.
+    """
+    username = get_username_from_http()
 
     message_uuid = uuid.uuid4()
 
@@ -56,9 +67,13 @@ def create_message(text_message: str, number: str, provider: str):
 
 @app.route("/message-status/<message_uuid>")
 def message_status(message_uuid: str):
-    code_str = request.headers.get("AUTHORIZATION").lstrip("Basic ")
-    decode_str = b64decode(code_str)
-    username = decode_str.decode("utf-8").split(":")[0]
+    """
+    By uuid of the message, it gives information
+    about it from the database in json format.
+    If the username from the HTTP header does not
+    match the creator of the post, then 403.
+    """
+    username = get_username_from_http()
 
     message = Message.query.filter_by(message_uuid=message_uuid).first()
     if message.created_by == username:
@@ -80,5 +95,8 @@ def message_status(message_uuid: str):
 
 @app.route("/messages-info")
 def messages_info():
+    """
+    Helper function for debugging, returns information about all messages.
+    """
     messages = Message.query.order_by(Message.created_at.desc()).all()
     return render_template("messages-info.html", messages=messages)
