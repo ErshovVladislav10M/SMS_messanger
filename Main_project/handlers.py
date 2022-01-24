@@ -36,7 +36,7 @@ def get_username_from_http():
 
 
 @app.route("/create-message/<text_message>/<number>/<provider>")
-def create_message(text_message: str, number: str, provider: str):
+def create_message_add_to_db(text_message: str, number: str, provider: str):
     """
     Creating an instance of the Message class
     and inserting it into the database.

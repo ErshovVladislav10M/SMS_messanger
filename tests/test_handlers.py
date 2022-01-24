@@ -32,11 +32,11 @@ class TestFunc(TestCase):
         "Main_project.handlers.get_username_from_http",
         return_value="yersh",
     )
-    def test_create_message(self, get_username_from_http):
+    def test_create_message_add_to_db(self, get_username_from_http):
         assert isinstance(
             uuid.UUID(
                 json.loads(
-                    Main_project.handlers.create_message(
+                    Main_project.handlers.create_message_add_to_db(
                         "qwerty", "+79212224466", "FileProvider"
                     )
                 )
