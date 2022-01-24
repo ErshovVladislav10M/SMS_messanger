@@ -1,7 +1,6 @@
 import datetime
 import json
 import uuid
-from base64 import b64decode
 
 from flask import abort, render_template, request
 
@@ -59,7 +58,7 @@ def create_message(text_message: str, number: str, provider: str):
         db.session.add(message)
         db.session.commit()
         QUEUE_MESSAGES_UUID.append(str(message_uuid))
-        messenger_controller()
+        messenger_controller.delay()
         return json.dumps(str(message_uuid))
     except MyError:
         return json.dumps("Error adding message")
