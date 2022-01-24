@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Run script
         run: |
-          pip install flake8 isort black pytest flask celery
+          pip install flake8 isort black pytest flask celery flask_sqlalchemy
           ls -la
           flake8 .
           isort --line-length 80 --check .
