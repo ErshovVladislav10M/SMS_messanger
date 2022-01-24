@@ -20,3 +20,4 @@ jobs:
           flake8 .
           isort --line-length 80 --check .
           black --line-length 80 --check .
+          py.test tests
