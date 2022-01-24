@@ -1,4 +1,5 @@
 import json
+import uuid
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -26,3 +27,19 @@ class TestFunc(TestCase):
             "delivered_at": "2022-01-21 21:55:19.520754",
             "status": "Delivered",
         }
+
+    @patch(
+        "Main_project.handlers.get_username_from_http",
+        return_value="yersh",
+    )
+    def test_create_message(self, get_username_from_http):
+        assert isinstance(
+            uuid.UUID(
+                json.loads(
+                    Main_project.handlers.create_message(
+                        "qwerty", "+79212224466", "FileProvider"
+                    )
+                )
+            ),
+            type(uuid.uuid4()),
+        )
