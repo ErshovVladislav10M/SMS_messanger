@@ -72,7 +72,7 @@ def add_message_to_db(message):
         db.session.commit()
         QUEUE_MESSAGES_UUID.append(message.message_uuid)
         messenger_controller.delay()
-        return json.dumps(message.message_uuid)
+        return json.dumps(message.message_uuid), 201
     except MyError:
         return json.dumps("Error adding message")
 
@@ -121,6 +121,6 @@ def message_status(message_uuid: str):
             "delivered_at": str(message.delivered_at),
             "status": message.status,
         }
-        return json.dumps(data)
+        return json.dumps(data), 200
     else:
         return abort(403)

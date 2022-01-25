@@ -1,12 +1,14 @@
 import datetime
 
+from Main_project.Providers.BaseProvider import BaseProvider
 from Main_project.base import db
 from Main_project.db_model import Message
 
 
-class StubProvider:
+class StubProvider(BaseProvider):
     name = "StubProvider"
     numbers_of_attempt_send = 1
+    repeat_time = 0.5
 
     @staticmethod
     def send_message(message: Message):

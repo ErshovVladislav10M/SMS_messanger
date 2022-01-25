@@ -1,13 +1,15 @@
 import datetime
 from pathlib import Path
 
+from Main_project.Providers.BaseProvider import BaseProvider
 from Main_project.base import db
 from Main_project.db_model import Message
 
 
-class FileProvider:
+class FileProvider(BaseProvider):
     name = "FileProvider"
     numbers_of_attempt_send = 3
+    repeat_time = 0.5
 
     @staticmethod
     def send_message(message: Message):
@@ -41,7 +43,7 @@ class FileProvider:
         message.sent_at = datetime.datetime.now()
         if int(message.number[-1]) % 2 == 0:
             message.delivered_at = message.sent_at + datetime.timedelta(
-                days=0, seconds=10
+                seconds=10
             )
             message.status = "Is delivered"
         else:
