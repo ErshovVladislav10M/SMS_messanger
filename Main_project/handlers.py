@@ -76,7 +76,7 @@ def add_message_to_db(message):
 
 
 @app.route("/create-message/<text_message>/<number>/<provider>")
-def create_mes_by_user(text_message: str, number: str, provider: str):
+def create_message_by_user(text_message: str, number: str, provider: str):
     """
     Creating an instance of the Message class
     and inserting it into the database.
@@ -87,7 +87,7 @@ def create_mes_by_user(text_message: str, number: str, provider: str):
 
 
 @app.route("/create-message/<text_message>/<number>")
-def create_mes_by_user_without_provider(text_message: str, number: str):
+def create_message_by_user_without_provider(text_message: str, number: str):
     """
     Creating an instance of the message class and
     inserting into the database with the choice of the default provider
