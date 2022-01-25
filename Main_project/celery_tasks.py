@@ -21,7 +21,7 @@ def messenger_controller():
         for provider in LIST_PROVIDERS:
             if provider.name == message.provider:
                 attempt = 1
-                while provider.numbers_of_attempt_send <= attempt:
+                while provider.numbers_of_attempt_send >= attempt:
                     provider.send_message(message)
                     attempt += 1
                     time.sleep(0.5)
