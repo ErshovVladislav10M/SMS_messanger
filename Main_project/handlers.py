@@ -14,7 +14,7 @@ class MyError(BaseException):
     pass
 
 
-def get_request_headers_authorization():
+def get_headers_authorization():
     """
     Getting the Authorization HTTP Header.
     """
@@ -27,23 +27,23 @@ def authentication():
     Checking for the presence of an HTTP header
     and the correctness of its format.
     """
-    if not get_request_headers_authorization():
-        abort(401)
-    elif get_request_headers_authorization().split()[0] != "Basic":
-        abort(401)
+    if not get_headers_authorization():
+        return abort(401)
+    elif get_headers_authorization().split()[0] != "Basic":
+        return abort(401)
 
 
 def get_username_from_http():
     """
     Getting username from HTTP header.
     """
-    code_str = get_request_headers_authorization().lstrip("Basic ")
+    code_str = get_headers_authorization().lstrip("Basic ")
     decode_str = b64decode(code_str)
     return decode_str.decode("utf-8").split(":")[0]
 
 
 @app.route("/create-message/<text_message>/<number>/<provider>")
-def create_message_add_to_db(text_message: str, number: str, provider: str):
+def create_message_add_to_db(text_message: str, number: str, provider="StubProvider"):
     """
     Creating an instance of the Message class
     and inserting it into the database.

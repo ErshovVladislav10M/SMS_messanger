@@ -1,3 +1,4 @@
+import Main_project.handlers
 from Main_project.base import app
 
 if __name__ == "__main__":
