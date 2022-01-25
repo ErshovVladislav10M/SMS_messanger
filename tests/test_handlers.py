@@ -94,7 +94,7 @@ class TestFunc(TestCase):
                 == "23274bba-8078-486e-911a-0a6dfc3e7624"
             )
 
-    @patch(
+    """@patch(
         "Main_project.handlers.get_headers_authorization",
         return_value="Basic eWVyc2g6",
     )
@@ -110,4 +110,4 @@ class TestFunc(TestCase):
                     )
                 )
                 == "23274bba-8078-486e-911a-0a6dfc3e7624"
-            )
+            )"""
