@@ -124,12 +124,3 @@ def message_status(message_uuid: str):
         return json.dumps(data)
     else:
         return abort(403)
-
-
-@app.route("/messages-info")
-def messages_info():
-    """
-    Helper function for debugging, returns information about all messages.
-    """
-    messages = Message.query.order_by(Message.created_at.desc()).all()
-    return render_template("messages-info.html", messages=messages)
