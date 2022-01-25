@@ -17,7 +17,7 @@ jobs:
         run: |
           pip install flake8 isort black pytest flask celery flask_sqlalchemy redis
           ls -la
-          flake8 --ignore=E501 /__w/SMS_messenger/SMS_messenger/tests/test_handlers.py .
+          flake8 .
           isort --line-length 80 --check .
           black --line-length 80 --check .
           py.test tests
