@@ -42,17 +42,7 @@ def get_username_from_http():
     return decode_str.decode("utf-8").split(":")[0]
 
 
-@app.route("/create-message/<text_message>/<number>")
-def create_message_by_user_without_provider(text_message: str, number: str):
-    """
-    Creating an instance of the message class and
-    inserting into the database with the choice of the default provider
-    Returns the uuid of the generated message, if successful.
-    """
-    return create_message_by_user(text_message, number, "FileProvider")
-
-
-def create_message(text_message: str, number: str, provider: str):
+def create_message(text_message: str, number: str, provider="StubProvider"):
     """
     Returns the created instance of the Message class.
     """
@@ -93,6 +83,17 @@ def create_message_by_user(text_message: str, number: str, provider: str):
     Returns the uuid of the generated message, if successful.
     """
     message = create_message(text_message, number, provider)
+    return add_message_to_db(message)
+
+
+@app.route("/create-message/<text_message>/<number>")
+def create_message_by_user_without_provider(text_message: str, number: str):
+    """
+    Creating an instance of the message class and
+    inserting into the database with the choice of the default provider
+    Returns the uuid of the generated message, if successful.
+    """
+    message = create_message(text_message, number)
     return add_message_to_db(message)
 
 
