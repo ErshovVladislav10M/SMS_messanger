@@ -15,6 +15,24 @@ class TestFunc(TestCase):
 
     @patch(
         "Main_project.handlers.get_headers_authorization",
+        return_value=None,
+    )
+    def test_authentication_negative_case1(self, get_headers_authorization):
+        with self.assertRaises(Exception) as context:
+            Main_project.handlers.authentication()
+        self.assertEqual("401 Unauthorized", str(context.exception).split(":")[0])
+
+    @patch(
+        "Main_project.handlers.get_headers_authorization",
+        return_value=" eWVyc2g6",
+    )
+    def test_authentication_negative_case2(self, get_headers_authorization):
+        with self.assertRaises(Exception) as context:
+            Main_project.handlers.authentication()
+        self.assertEqual("401 Unauthorized", str(context.exception).split(":")[0])
+
+    @patch(
+        "Main_project.handlers.get_headers_authorization",
         return_value="Basic eWVyc2g6",
     )
     def test_get_username_from_http(self, get_headers_authorization):
