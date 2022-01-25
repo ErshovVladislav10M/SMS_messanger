@@ -18,6 +18,6 @@ jobs:
           pip install flake8 isort black pytest flask celery flask_sqlalchemy redis
           ls -la
           flake8 .
-          isort --line-length 80 --check .
-          black --line-length 80 --check .
+          isort --line-length 90 --check .
+          black --line-length 90 --check .
           py.test tests
