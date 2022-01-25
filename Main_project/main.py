@@ -1,4 +1,4 @@
-import Main_project.handlers
+import Main_project.handlers  # isort:skip
 from Main_project.base import app
 
 if __name__ == "__main__":
