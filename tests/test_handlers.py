@@ -20,7 +20,9 @@ class TestFunc(TestCase):
     def test_authentication_negative_case1(self, get_headers_authorization):
         with self.assertRaises(Exception) as context:
             Main_project.handlers.authentication()
-        self.assertEqual("401 Unauthorized", str(context.exception).split(":")[0])
+        self.assertEqual(
+            "401 Unauthorized", str(context.exception).split(":")[0]
+        )
 
     @patch(
         "Main_project.handlers.get_headers_authorization",
@@ -29,7 +31,9 @@ class TestFunc(TestCase):
     def test_authentication_negative_case2(self, get_headers_authorization):
         with self.assertRaises(Exception) as context:
             Main_project.handlers.authentication()
-        self.assertEqual("401 Unauthorized", str(context.exception).split(":")[0])
+        self.assertEqual(
+            "401 Unauthorized", str(context.exception).split(":")[0]
+        )
 
     @patch(
         "Main_project.handlers.get_headers_authorization",
@@ -42,7 +46,7 @@ class TestFunc(TestCase):
         "Main_project.handlers.get_headers_authorization",
         return_value="Basic eWVyc2g6",
     )
-    def test_message_status(self, get_headers_authorization):
+    def test_message_status_positive(self, get_headers_authorization):
         assert json.loads(
             Main_project.handlers.message_status(
                 "23274bba-8078-486e-911a-0a6dfc3e7624"
@@ -58,6 +62,17 @@ class TestFunc(TestCase):
             "delivered_at": "2022-01-21 21:55:19.520754",
             "status": "Delivered",
         }
+
+    @patch(
+        "Main_project.handlers.get_headers_authorization",
+        return_value="Basic dXNlcjo=",
+    )
+    def test_message_status_negative(self, get_headers_authorization):
+        with self.assertRaises(Exception) as context:
+            Main_project.handlers.message_status(
+                "23274bba-8078-486e-911a-0a6dfc3e7624"
+            )
+        self.assertEqual("403 Forbidden", str(context.exception).split(":")[0])
 
     @patch(
         "Main_project.handlers.get_headers_authorization",
