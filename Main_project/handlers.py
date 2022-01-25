@@ -9,6 +9,8 @@ from Main_project.base import app, db
 from Main_project.celery_tasks import QUEUE_MESSAGES_UUID, messenger_controller
 from Main_project.db_model import Message
 
+app = app
+
 
 class MyError(BaseException):
     pass
