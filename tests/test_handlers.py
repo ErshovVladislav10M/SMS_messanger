@@ -1,5 +1,4 @@
 import json
-import uuid
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -48,14 +47,14 @@ class TestFunc(TestCase):
     )
     def test_create_message_by_user(self, get_headers_authorization):
         with patch("Main_project.handlers.add_message_to_db") as fun:
-            fun.return_value = json.dumps("23274bba-8078-486e-911a-0a6dfc3e7624")
-            assert isinstance(
-                uuid.UUID(
-                    json.loads(
-                        Main_project.handlers.create_message_by_user(
-                            "qwerty", "+79212224466", "FileProvider"
-                        )
+            fun.return_value = json.dumps(
+                "23274bba-8078-486e-911a-0a6dfc3e7624"
+            )
+            assert (
+                json.loads(
+                    Main_project.handlers.create_message_by_user(
+                        "qwerty", "+79212224466", "FileProvider"
                     )
-                ),
-                type(uuid.uuid4()),
+                )
+                == "23274bba-8078-486e-911a-0a6dfc3e7624"
             )
