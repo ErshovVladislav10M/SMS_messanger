@@ -3,7 +3,7 @@ import json
 import uuid
 from base64 import b64decode
 
-from flask import abort, render_template, request
+from flask import abort, request
 
 from Main_project.base import app, db
 from Main_project.celery_tasks import QUEUE_MESSAGES_UUID, messenger_controller
