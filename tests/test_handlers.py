@@ -18,14 +18,6 @@ class TestFunc(TestCase):
         "Main_project.handlers.get_headers_authorization",
         return_value="Basic eWVyc2g6",
     )
-    def test_authentication_negative(self, get_headers_authorization):
-        Main_project.handlers.authentication()
-        assert 0 == 0
-
-    @patch(
-        "Main_project.handlers.get_headers_authorization",
-        return_value="Basic eWVyc2g6",
-    )
     def test_get_username_from_http(self, get_headers_authorization):
         assert Main_project.handlers.get_username_from_http() == "yersh"
 
@@ -54,14 +46,16 @@ class TestFunc(TestCase):
         "Main_project.handlers.get_headers_authorization",
         return_value="Basic eWVyc2g6",
     )
-    def test_create_message_add_to_db(self, get_headers_authorization):
-        assert isinstance(
-            uuid.UUID(
-                json.loads(
-                    Main_project.handlers.create_message_add_to_db(
-                        "qwerty", "+79212224466", "FileProvider"
+    def test_create_message_by_user(self, get_headers_authorization):
+        with patch("Main_project.handlers.add_message_to_db") as fun:
+            fun.return_value = json.dumps("23274bba-8078-486e-911a-0a6dfc3e7624")
+            assert isinstance(
+                uuid.UUID(
+                    json.loads(
+                        Main_project.handlers.create_message_by_user(
+                            "qwerty", "+79212224466", "FileProvider"
+                        )
                     )
-                )
-            ),
-            type(uuid.uuid4()),
-        )
+                ),
+                type(uuid.uuid4()),
+            )
